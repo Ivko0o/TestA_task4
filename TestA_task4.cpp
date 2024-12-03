@@ -4,23 +4,27 @@
 
 using namespace std;
 
-void ReadArray(int array[]);
+void ReadArray(int array[], int size);
 void PrintArray(int array[], int size);
-bool IsSorted(int array[]);
-void CountEvenEvenNumbers(int array[]);
-void clearArray(int array[], int& size);
+bool IsSorted(int array[], int size);
+void CountEvenEvenNumbers(int array[], int size);
+void ClearArray(int array[], int& size);
 
 int main()
 {
-	int size = 5;
-	int numbersArray[5] = {};
+	int size = 0;
+
+	cout << "Enter the size of the array that you want to create \n";
+	cin >> size;
+
+	int* array = new int[size];
 	int evenNumbers = 0;
 
-	cout << "Enter 5 natural numbers:" << endl;
-	ReadArray(numbersArray);
-	PrintArray(numbersArray, size);
+	cout << "Enter " << size << " natural numbers: " << endl;
+	ReadArray(array, size);
+	PrintArray(array, size);
 
-	if (IsSorted(numbersArray)) {
+	if (IsSorted(array, size)) {
 		cout << "Sorted";
 		cout << endl << endl;
 	}
@@ -29,16 +33,18 @@ int main()
 		cout << endl << endl;
 	}
 
-	CountEvenEvenNumbers(numbersArray);
-	clearArray(numbersArray, size);
-	PrintArray(numbersArray, size);
+	CountEvenEvenNumbers(array, size);
+	ClearArray(array, size);
+	PrintArray(array, size);
+
+	delete[] array;
 
 
 }
 
 //This function takes as input the numbers of the array
-void ReadArray(int array[]) {
-	for (int i = 0; i < 5; i++) {
+void ReadArray(int array[], int size) {
+	for (int i = 0; i < size; i++) {
 		cin >> array[i];
 	}
 	cout << endl;
@@ -53,17 +59,17 @@ void PrintArray(int array[], int size) {
 }
 
 //This function checks if the program is sorted or not
-bool IsSorted(int array[]) {
+bool IsSorted(int array[], int size) {
 	bool ascending = true;
 	bool descending = true;
 
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < size - 1; ++i) {
 		if (array[i] > array[i + 1]) {
 			ascending = false;
 		}
 	}
 
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < size - 1; ++i) {
 		if (array[i] < array[i + 1]) {
 			descending = false;
 		}
@@ -74,15 +80,16 @@ bool IsSorted(int array[]) {
 }
 
 //The function will count the the even bits only at the even positions in binary form
-void CountEvenEvenNumbers(int array[]) {
+void CountEvenEvenNumbers(int array[], int size) {
 
 	int countNumber = 0;
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < size; i++) {
 		int countEvenBits = 0;
 		int a = 1;
 		int pos = 0;
-		for (int j = 0; j < 16; j++) {
+
+		for (int j = 0; j < (sizeof(array[0]*4)); j++) {
 			if (array[i] & a) {
 				countEvenBits++;	
 			}
@@ -109,16 +116,17 @@ void CountEvenEvenNumbers(int array[]) {
 
 }
 
-//This program will delete the elements that have even number of 1 bits at the even places in the binary form of the number
-void clearArray(int array[], int& size) {
-	int newArray[5] = {};
+//This function will delete the elements that have even number of 1 bits at the even places in the binary form of the number
+void ClearArray(int array[], int& size) {
+
+	int* newArray = new int[size];
 	int newSize = 0;
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < size; i++) {
 		int countEvenBits = 0;
 		int a = 1;
 		//This checks only the even places of the bits
-		for (int j = 0; j < 16; j++) {
+		for (int j = 0; j < (sizeof(array[0] * 4)); j++) {
 			if (array[i] & a) {
 				countEvenBits++;
 			}
@@ -137,4 +145,6 @@ void clearArray(int array[], int& size) {
 	}
 
 	size = newSize;
+
+	delete[] newArray;
 }
